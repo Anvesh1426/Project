@@ -59,7 +59,8 @@
 }
 
 .snake{
-    background-color: purple;
+    
+  background: linear-gradient(rgb(163, 137, 236), rgb(140, 223, 175));
     border: .25vmin solid white;
     border-radius: 12px;
 }
@@ -67,13 +68,13 @@
 .food{
     background: red;
     border: .25vmin solid black;
-    border-radius: 8px;
+    border-radius: 80px;
 }
 
 .foodReverse{
     background: yellow;
     border: .25vmin solid black;
-    border-radius: 8px;
+    border-radius: 80px;
 }
 
 #points {
@@ -169,4 +170,95 @@ input[type="range"] {
   
   .slider.round:before {
     border-radius: 50%;
+  }
+
+  /* test start*/
+  .popup {
+      position:absolute;
+      top:300px;
+      left:20px;
+      
+  }
+  .button {
+      font-size: 39px;
+      font-weight: bold;
+      font-family: 'New Tegomin', serif;
+      border: 2px solid black;
+      border-radius: 10px;
+      cursor: pointer;
+      padding: 10px;
+      background: linear-gradient(rgb(240, 124, 124), rgb(228, 228, 129));
+  }
+  *, *::after, *::before {
+    box-sizing: border-box;
+  }
+  
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 200ms ease-in-out;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 10;
+    background-color: white;
+    width: 500px;
+    max-width: 80%;
+    background: linear-gradient(rgb(240, 124, 124), rgb(228, 228, 129));
+  }
+  
+  .modal.active {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  
+  .modal-header {
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid black;
+    border-radius: 10px;
+    background: linear-gradient(rgb(123, 177, 221), rgb(221, 241, 149));
+  }
+  
+  .modal-header .title {
+    font-size: 1.35rem;
+    font-weight: bold;
+    font-family: 'New Tegomin', serif;
+  }
+  
+  .modal-header .close-button {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 1.25rem;
+    font-weight: bold;
+  }
+  
+  .modal-body {
+    padding: 10px 15px;
+    font-size: 15px;
+    font-family: 'New Tegomin', serif;
+    font-weight: bold;
+    border-radius: 10px;
+    background: linear-gradient(rgb(240, 124, 124), rgb(228, 228, 129));
+  }
+  
+  #overlay {
+    position: fixed;
+    opacity: 0;
+    transition: 200ms ease-in-out;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, .5);
+    pointer-events: none;
+  }
+  
+  #overlay.active {
+    opacity: 1;
+    pointer-events: all;
   }
