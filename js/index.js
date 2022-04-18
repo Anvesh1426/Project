@@ -1,3 +1,5 @@
+//const { VirtualConsole } = require("jsdom");
+
 // Game Constants & Variables
 let inputDir = { x: 0, y: 0 };
 const foodSound = new Audio("music/food.mp3");
@@ -5,7 +7,10 @@ const gameOverSound = new Audio("music/gameover.mp3");
 const moveSound = new Audio("music/move.mp3");
 const musicSound = new Audio("music/music.mp3");
 let speed = 15;
+speed = document.getElementById("pointsBar").value;
+console.log("range slider",speed);
 let score = 0;
+let pause = false;
 let topp = false;
 let bottom = false;
 let right = false;
@@ -13,9 +18,10 @@ let left = false;
 let flagColor = 1;
 let lastPaintTime = 0;
 let snakeArr = [{ x: 13, y: 15 }];
-
+let reverseFoodGame = false;
 food = { x: 6, y: 7 };
-
+let toggleSwitch = document.querySelector('input[type="checkbox"]').value;
+//console.log("lavesh",toggleSwitch);
 // Game Functions
 // function reverse(snakeArr){
 //     let start = 0;
@@ -27,10 +33,20 @@ food = { x: 6, y: 7 };
 function main(ctime) {
   window.requestAnimationFrame(main);
   // console.log(ctime)
+  speed = document.getElementById("pointsBar").value;
+  let toggleSwitch = document.querySelector('input[type="checkbox"]').checked;
+  if(toggleSwitch === false){
+    reverseFoodGame = false;
+  }
+  else{
+    reverseFoodGame = true;
+  }
+  //console.log("lavesh",toggleSwitch);
   if ((ctime - lastPaintTime) / 1000 < 1 / speed) {
     return;
   }
   lastPaintTime = ctime;
+ 
   gameEngine();
 }
 
@@ -64,6 +80,7 @@ async function gameEngine() {
   // Part 1: Updating the snake array & Food
   if (isCollide(snakeArr)) {
     gameOverSound.play();
+    window.moveBy(500, 500);
     musicSound.pause();
     inputDir = { x: 0, y: 0 };
     alert("Game Over. Press any key to play again!");
@@ -75,6 +92,9 @@ async function gameEngine() {
     bottom = false;
     left = false;
     right = false;
+    speed = document.getElementById("pointsBar").value;
+    console.log("range slider died",speed);
+   
   }
 
   // If you have eaten the food, increment the score and regenerate the food
@@ -93,7 +113,7 @@ async function gameEngine() {
     scoreBox.innerHTML = "Score: " + score;
 
     //add elements to the beginning of the array
-    if(flagColor == 2){
+    if(flagColor == 2 && reverseFoodGame === true){
        
         let zeroth = snakeArr[snakeArr.length-1];
         let first = snakeArr[snakeArr.length-2];
@@ -189,12 +209,15 @@ async function gameEngine() {
   }
 
   // Moving the snake
-  for (let i = snakeArr.length - 2; i >= 0; i--) {
-    snakeArr[i + 1] = { ...snakeArr[i] };
+  if(pause === false){
+    for (let i = snakeArr.length - 2; i >= 0; i--) {
+      snakeArr[i + 1] = { ...snakeArr[i] };
+    }
+  
+    snakeArr[0].x += inputDir.x;
+    snakeArr[0].y += inputDir.y;
   }
-
-  snakeArr[0].x += inputDir.x;
-  snakeArr[0].y += inputDir.y;
+  
 
   // Part 2: Display the snake and Food
   // Display the snake
@@ -225,7 +248,11 @@ async function gameEngine() {
 }
 
 // Main logic starts here
-musicSound.play();
+//console.log(document.querySelector("#pointsBar"));
+
+  musicSound.play();
+
+
 let hiscore = localStorage.getItem("hiscore");
 if (hiscore === null) {
   hiscoreval = 0;
@@ -244,6 +271,7 @@ window.addEventListener("keydown", (e) => {
   //   "right and left are " + horizontal + " and topp bottom are " + vertical
   //   );
 
+  
   moveSound.play();
   switch (e.key) {
     case "ArrowUp":
@@ -256,6 +284,10 @@ window.addEventListener("keydown", (e) => {
         bottom = true;
         left = false;
         right = false;
+      }
+      if(pause === true){
+        pause = false;
+        musicSound.play();
       }
       break;
 
@@ -270,6 +302,10 @@ window.addEventListener("keydown", (e) => {
         left = false;
         right = false;
       }
+      if(pause === true){
+        pause = false;
+        musicSound.play();
+      }
       break;
 
     case "ArrowLeft":
@@ -283,6 +319,10 @@ window.addEventListener("keydown", (e) => {
         topp = false;
         bottom = false;
       }
+      if(pause === true){
+        pause = false;
+        musicSound.play();
+      }
       break;
 
     case "ArrowRight":
@@ -295,7 +335,22 @@ window.addEventListener("keydown", (e) => {
         topp = false;
         bottom = false;
       }
+      if(pause === true){
+        pause = false;
+        musicSound.play();
+      }
       break;
+    case " ":
+        console.log("space pressed");  
+        if(pause === false){
+          pause = true;
+          musicSound.pause();
+        }
+        else{
+          pause = false;
+          musicSound.play();
+        }
+        break;
     default:
       break;
   }
