@@ -78,6 +78,7 @@ var swapArrayElements = function (a, x, y) {
   
 async function gameEngine() {
   // Part 1: Updating the snake array & Food
+  
   if (isCollide(snakeArr)) {
     gameOverSound.play();
     window.moveBy(500, 500);
@@ -250,7 +251,7 @@ async function gameEngine() {
 // Main logic starts here
 //console.log(document.querySelector("#pointsBar"));
 
-  musicSound.play();
+ 
 
 
 let hiscore = localStorage.getItem("hiscore");
@@ -271,7 +272,7 @@ window.addEventListener("keydown", (e) => {
   //   "right and left are " + horizontal + " and topp bottom are " + vertical
   //   );
 
-  
+  musicSound.play(); 
   moveSound.play();
   switch (e.key) {
     case "ArrowUp":
