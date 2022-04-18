@@ -10,6 +10,28 @@
 <body>
 
     <div class="body">
+        
+        <!-- popup start -->
+      <div class="popup">
+        <button data-modal-target="#modal" class="button">Rules</button>
+        <div class="modal" id="modal">
+          <div class="modal-header">
+            <div class="title">Rules:</div>
+            <button data-close-button class="close-button">&times;</button>
+          </div>
+          <div class="modal-body">
+            1.If you eat yellow food than your direction is reversed<br/>
+            2.If you eat red food than your direction will remain same<br/>
+            3.Press Space baar to pause and resume the game <br/>
+            4.Rule one is only valid if you switch on reverse option.<br/>
+            5.Speed is controlled by range slider.<br/>
+            6.Happy Gaming!! Go and beat the High Score
+          </div>
+        </div>
+        <div id="overlay"></div>
+      </div>
+         <!-- popup ends -->
+
         <label id="points">Speed </label>
         <input type="range" id="pointsBar" name="points" min="0" max="25"  onkeydown="event.preventDefault()">
         <label id="reverse">Reverse Food</label>
@@ -23,4 +45,5 @@
     </div>
 </body>
  <script src="js/index.js"></script>
+ <script src="js/popup.js"></script>
 </html>
