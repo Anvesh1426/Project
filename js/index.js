@@ -8,7 +8,7 @@ const moveSound = new Audio("music/move.mp3");
 const musicSound = new Audio("music/music.mp3");
 let speed = 15;
 speed = document.getElementById("pointsBar").value;
-console.log("range slider",speed);
+console.log("range slider", speed);
 let score = 0;
 let pause = false;
 let topp = false;
@@ -35,10 +35,9 @@ function main(ctime) {
   // console.log(ctime)
   speed = document.getElementById("pointsBar").value;
   let toggleSwitch = document.querySelector('input[type="checkbox"]').checked;
-  if(toggleSwitch === false){
+  if (toggleSwitch === false) {
     reverseFoodGame = false;
-  }
-  else{
+  } else {
     reverseFoodGame = true;
   }
   //console.log("lavesh",toggleSwitch);
@@ -46,14 +45,16 @@ function main(ctime) {
     return;
   }
   lastPaintTime = ctime;
- 
+
   gameEngine();
 }
 
 function isCollide(snake) {
   // If you bump into yourself
   for (let i = 1; i < snakeArr.length; i++) {
-    if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+    if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
+      console.log(snake[i].x, snake[i].y, snake[0].x, snake[0].y);
+      console.log("lavesh", i);
       return true;
     }
   }
@@ -68,17 +69,17 @@ function isCollide(snake) {
   }
 
   return false;
-} 
+}
 
 var swapArrayElements = function (a, x, y) {
-    if (a.length === 1) return a;
-    a.splice(y, 1, a.splice(x, 1, a[y])[0]);
-    return a;
-  };
-  
+  if (a.length === 1) return a;
+  a.splice(y, 1, a.splice(x, 1, a[y])[0]);
+  return a;
+};
+
 async function gameEngine() {
   // Part 1: Updating the snake array & Food
-  
+
   if (isCollide(snakeArr)) {
     gameOverSound.play();
     window.moveBy(500, 500);
@@ -94,8 +95,7 @@ async function gameEngine() {
     left = false;
     right = false;
     speed = document.getElementById("pointsBar").value;
-    console.log("range slider died",speed);
-   
+    console.log("range slider died", speed);
   }
 
   // If you have eaten the food, increment the score and regenerate the food
@@ -105,7 +105,7 @@ async function gameEngine() {
     // }
     foodSound.play();
     score += 1;
-   
+
     if (score > hiscoreval) {
       hiscoreval = score;
       localStorage.setItem("hiscore", JSON.stringify(hiscoreval));
@@ -114,85 +114,77 @@ async function gameEngine() {
     scoreBox.innerHTML = "Score: " + score;
 
     //add elements to the beginning of the array
-    if(flagColor == 2 && reverseFoodGame === true){
-       
-        let zeroth = snakeArr[snakeArr.length-1];
-        let first = snakeArr[snakeArr.length-2];
-        if(first === undefined){
-            if(inputDir.y === 0){
-                inputDir.x = -inputDir.x;
-            }
-            else{
-               inputDir.y = -inputDir.y;
-            }
+    if (flagColor == 2 && reverseFoodGame === true) {
+      let zeroth = snakeArr[snakeArr.length - 1];
+      let first = snakeArr[snakeArr.length - 2];
+      if (first === undefined) {
+        if (inputDir.y === 0) {
+          inputDir.x = -inputDir.x;
+        } else {
+          inputDir.y = -inputDir.y;
         }
-        // console.log(zeroth);
-        // console.log(first);
-        else{
+      }
+      // console.log(zeroth);
+      // console.log(first);
+      else {
         let diff_X = zeroth.x - first.x;
         let diff_Y = zeroth.y - first.y;
-        if(diff_Y < 0){
-            //up case
-            console.log("upcase");
-            inputDir.x = 0;
-            inputDir.y = -1;
-            topp = true;
-            bottom = true;
-            left = false;
-            right = false;
+        if (diff_Y < 0) {
+          //up case
+          console.log("upcase");
+          inputDir.x = 0;
+          inputDir.y = -1;
+          topp = true;
+          bottom = true;
+          left = false;
+          right = false;
+        } else if (diff_Y > 0) {
+          //down case
+          console.log("down case");
+          inputDir.x = 0;
+          inputDir.y = 1;
+          topp = true;
+          bottom = true;
+          left = false;
+          right = false;
+        } else if (diff_X < 0) {
+          //left case
+          console.log("left case");
+          inputDir.x = -1;
+          inputDir.y = 0;
+          topp = false;
+          bottom = false;
+          left = true;
+          right = true;
+        } else {
+          //right case
+          console.log("right case");
+          inputDir.x = 1;
+          inputDir.y = 0;
+          topp = false;
+          bottom = false;
+          left = true;
+          right = true;
         }
-        else if(diff_Y > 0){
-            //down case
-            console.log("down case");
-            inputDir.x = 0;
-            inputDir.y = 1;
-            topp = true;
-           bottom = true;
-           left = false;
-           right = false;
-        }
-        else if(diff_X < 0){
-           //left case
-           console.log("left case");
-           inputDir.x = -1;
-           inputDir.y = 0;
-           topp = false;
-           bottom = false;
-           left = true;
-           right = true;
-        }
-        else{
-           //right case
-           console.log("right case");
-           inputDir.x = 1;
-           inputDir.y = 0;
-           topp = false;
-           bottom = false;
-           left = true;
-           right = true;
-        }
+      }
+      // if(inputDir.y === 0){
+      //     inputDir.x = -inputDir.x;
+      // }
+      // else{
+      //    inputDir.y = -inputDir.y;
+      // }
+      snakeArr.reverse();
+      snakeArr.unshift({
+        x: snakeArr[0].x + inputDir.x,
+        y: snakeArr[0].y + inputDir.y,
+      });
+    } else {
+      snakeArr.unshift({
+        x: snakeArr[0].x + inputDir.x,
+        y: snakeArr[0].y + inputDir.y,
+      });
     }
-        // if(inputDir.y === 0){
-        //     inputDir.x = -inputDir.x;
-        // }
-        // else{
-        //    inputDir.y = -inputDir.y;
-        // }
-        snakeArr.reverse();
-        snakeArr.unshift({
-            x: snakeArr[0].x + inputDir.x,
-            y: snakeArr[0].y + inputDir.y,
-          });
-         
-    }
-    else{
-        snakeArr.unshift({
-            x: snakeArr[0].x + inputDir.x,
-            y: snakeArr[0].y + inputDir.y,
-          });
-    }
-   
-    
+
     let a = 2;
     let b = 16;
     food = {
@@ -210,15 +202,19 @@ async function gameEngine() {
   }
 
   // Moving the snake
-  if(pause === false){
+
+  if (pause === false) {
     for (let i = snakeArr.length - 2; i >= 0; i--) {
       snakeArr[i + 1] = { ...snakeArr[i] };
     }
-  
+    // console.log("Completed");
     snakeArr[0].x += inputDir.x;
     snakeArr[0].y += inputDir.y;
+    // for(let i=0;i<snakeArr.length;i++){
+    //   console.log(snakeArr[i].x,snakeArr[i].y);
+    // }
+    // console.log("finally Completed");
   }
-  
 
   // Part 2: Display the snake and Food
   // Display the snake
@@ -251,9 +247,6 @@ async function gameEngine() {
 // Main logic starts here
 //console.log(document.querySelector("#pointsBar"));
 
- 
-
-
 let hiscore = localStorage.getItem("hiscore");
 if (hiscore === null) {
   hiscoreval = 0;
@@ -266,92 +259,116 @@ if (hiscore === null) {
 window.requestAnimationFrame(main);
 window.addEventListener("keydown", (e) => {
   //inputDir = { x: 0, y: -1 }; // Start the game
-//   vertical = false;
-//   horizontal = false;
+  //   vertical = false;
+  //   horizontal = false;
   //   console.log(
   //   "right and left are " + horizontal + " and topp bottom are " + vertical
   //   );
-
-  musicSound.play(); 
+  let first = snakeArr[0];
+  let second = snakeArr[1];
+  musicSound.play();
   moveSound.play();
   switch (e.key) {
     case "ArrowUp":
       //  console.log("ArrowUp");
-        console.log("up", topp);
-      if (topp === false && bottom === false) {
-        inputDir.x = 0;
-        inputDir.y = -1;
-        topp = true;
-        bottom = true;
-        left = false;
-        right = false;
-      }
-      if(pause === true){
+      console.log("up", topp);
+      if (pause === true) {
         pause = false;
         musicSound.play();
       }
+      first = snakeArr[0];
+       second = snakeArr[1];
+      if (second !== undefined) {
+        let diff_X = first.x - second.x;
+        let diff_Y = first.y - second.y;
+        if (diff_Y !== 0) {
+          break;
+        }
+      }
+
+      inputDir.x = 0;
+      inputDir.y = -1;
+
+     
+
       break;
 
     case "ArrowDown":
-      // console.log("ArrowDown");
-      //   console.log("down", vertical);
-      if (topp === false && bottom === false) {
-        inputDir.x = 0;
-        inputDir.y = 1;
-        topp = true;
-        bottom = true;
-        left = false;
-        right = false;
-      }
-      if(pause === true){
+      console.log("down", topp, bottom);
+      if (pause === true) {
         pause = false;
         musicSound.play();
       }
+      first = snakeArr[0];
+      second = snakeArr[1];
+      if (second !== undefined) {
+        diff_X = first.x - second.x;
+        diff_Y = first.y - second.y;
+        if (diff_Y !== 0) {
+          break;
+        }
+      }
+
+      inputDir.x = 0;
+      inputDir.y = 1;
+
+     
+      console.log("lavesh 4");
       break;
 
     case "ArrowLeft":
-      //   console.log("Left", horizontal);
-
-      if (left === false && right === false) {
-        inputDir.x = -1;
-        inputDir.y = 0;
-        left = true;
-        right = true;
-        topp = false;
-        bottom = false;
-      }
-      if(pause === true){
+      console.log("Left", left, right);
+      if (pause === true) {
         pause = false;
         musicSound.play();
       }
+      first = snakeArr[0];
+      second = snakeArr[1];
+      if (second !== undefined) {
+        diff_X = first.x - second.x;
+        diff_Y = first.y - second.y;
+        if (diff_X !== 0) {
+          break;
+        }
+      }
+
+      inputDir.x = -1;
+      inputDir.y = 0;
+
+     
       break;
 
     case "ArrowRight":
       //   console.log("ArrowRight");
-      if (left === false && right === false) {
-        inputDir.x = 1;
-        inputDir.y = 0;
-        left = true;
-        right = true;
-        topp = false;
-        bottom = false;
+      if (pause === true) {
+        pause = false;
+        musicSound.play();
       }
-      if(pause === true){
+      first = snakeArr[0];
+      second = snakeArr[1];
+      if (second !== undefined) {
+        diff_X = first.x - second.x;
+        diff_Y = first.y - second.y;
+        if (diff_X !== 0) {
+          break;
+        }
+      }
+
+      inputDir.x = 1;
+      inputDir.y = 0;
+
+     
+      break;
+    case " ":
+      console.log("space pressed");
+      if (pause === false) {
+        pause = true;
+        musicSound.pause();
+      } else {
         pause = false;
         musicSound.play();
       }
       break;
-    case " ":
-        console.log("space pressed");  
-        if(pause === false){
-          pause = true;
-          musicSound.pause();
-        }
-        else{
-          pause = false;
-          musicSound.play();
-        }
-        break;
     default:
       break;
   }
